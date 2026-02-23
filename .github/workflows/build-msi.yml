@@ -55,16 +55,29 @@ jobs:
           candle -?
           light -?
 
+      - name: Create release-only triplet
+        shell: pwsh
+        run: |
+          $tripletContent = @"
+set(VCPKG_TARGET_ARCHITECTURE x64)
+set(VCPKG_CRT_LINKAGE dynamic)
+set(VCPKG_LIBRARY_LINKAGE dynamic)
+set(VCPKG_BUILD_TYPE release)
+"@
+          New-Item -ItemType Directory -Force -Path "$env:VCPKG_INSTALLATION_ROOT\triplets\community"
+          $tripletContent | Out-File -FilePath "$env:VCPKG_INSTALLATION_ROOT\triplets\community\x64-windows-release.cmake" -Encoding ascii
+          Write-Host "Created custom triplet: x64-windows-release"
+
       - name: Install dependencies with vcpkg
         shell: pwsh
         run: |
           Write-Host "Installing dependencies from vcpkg.json manifest..."
-          vcpkg install --triplet x64-windows
+          vcpkg install --triplet x64-windows-release
 
           # Set environment variable for ODBC driver build
-          echo "AWS_SDK_PATH=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "AWS_SDK_PATH=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows-release" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-          Write-Host "Dependencies installed via vcpkg manifest mode"
+          Write-Host "Dependencies installed via vcpkg manifest mode (Release only)"
 
       - name: Build PostgreSQL Client Library
         shell: cmd
