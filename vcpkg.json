@@ -8,7 +8,6 @@
       "name": "aws-sdk-cpp",
       "version>=": "1.11.285",
       "features": [
-        "core",
         "redshift",
         "redshift-serverless",
         "sts",
