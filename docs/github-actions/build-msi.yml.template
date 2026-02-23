@@ -40,7 +40,7 @@ jobs:
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgGitCommitId: '05442024c3fda64320bd25d2251cc9807b84fb6f'
+          vcpkgGitCommitId: 'f40fabf85266d1e2cd3de8d5855842837bcef1dc'
 
       - name: Install WiX Toolset
         run: |
