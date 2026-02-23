@@ -13,7 +13,7 @@ if errorlevel 1 goto baderrorlevel
 echo Setting environment variables
 rem call vcvars64
 set THISCOMMAND=Call vcvarsall
-call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
 rem call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
 if errorlevel 1 goto baderrorlevel
 
