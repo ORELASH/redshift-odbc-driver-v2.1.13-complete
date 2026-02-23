@@ -1,0 +1,2 @@
+# vcpkg.json is not used - we use build64.bat for dependencies
+vcpkg.json

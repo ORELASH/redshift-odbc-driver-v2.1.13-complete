@@ -1,0 +1,17 @@
+fix: Remove vcpkg dependency management to avoid AWS SDK build failures
+
+Removed vcpkg.json manifest mode that was causing 19 consecutive build failures.
+The project will now build without vcpkg, using only pgclient build64.bat.
+
+Changes:
+- Removed vcpkg.json manifest
+- Removed vcpkg setup step from GitHub Actions workflow
+- Removed vcpkg toolchain from CMake configuration
+- Updated DEPENDENCIES_INSTALL_DIR to use workspace/dependencies path
+- Kept existing pgclient build64.bat step unchanged
+
+This approach was successful in v2.1.16 builds and eliminates AWS SDK C++ vcpkg issues.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
