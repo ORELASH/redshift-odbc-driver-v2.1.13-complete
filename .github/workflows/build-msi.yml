@@ -37,11 +37,6 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.3
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: 'f7423ee180c4b7f40d43402c2feb3859161ef625'
-
       - name: Install WiX Toolset
         run: |
           echo "Downloading WiX Toolset..."
@@ -55,16 +50,39 @@ jobs:
           candle -?
           light -?
 
-      - name: Install AWS SDK C++
+      - name: Build AWS SDK C++ from source
         shell: pwsh
         run: |
           cd $env:GITHUB_WORKSPACE
 
-          # Install AWS SDK dependencies via vcpkg
-          vcpkg install aws-sdk-cpp[core,redshift,redshift-serverless,sts,sso-oidc]:x64-windows
+          Write-Host "Downloading AWS SDK C++ 1.11.285..."
+          Invoke-WebRequest -Uri "https://github.com/aws/aws-sdk-cpp/archive/refs/tags/1.11.285.zip" -OutFile "aws-sdk.zip"
 
-          # Set environment variables for build
-          echo "AWS_SDK_PATH=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "Extracting AWS SDK..."
+          Expand-Archive -Path "aws-sdk.zip" -DestinationPath "."
+
+          Write-Host "Building AWS SDK C++..."
+          cd aws-sdk-cpp-1.11.285
+          mkdir build
+          cd build
+
+          cmake .. -G "Visual Studio 17 2022" -A x64 `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DBUILD_ONLY="core;redshift;redshift-serverless;sts;sso-oidc" `
+            -DENABLE_TESTING=OFF `
+            -DBUILD_SHARED_LIBS=OFF `
+            -DCMAKE_INSTALL_PREFIX="$env:GITHUB_WORKSPACE\aws-sdk-install"
+
+          Write-Host "Compiling AWS SDK (this will take 10-15 minutes)..."
+          cmake --build . --config Release --parallel
+
+          Write-Host "Installing AWS SDK..."
+          cmake --install . --config Release
+
+          # Set environment variable for ODBC driver build
+          echo "AWS_SDK_PATH=$env:GITHUB_WORKSPACE\aws-sdk-install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          Write-Host "AWS SDK C++ 1.11.285 built and installed successfully!"
 
       - name: Build PostgreSQL Client Library
         shell: cmd
@@ -85,7 +103,7 @@ jobs:
           # Configure with CMake
           cmake .. -G "Visual Studio 17 2022" -A x64 `
             -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT\scripts\buildsystems\vcpkg.cmake" `
+            -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE\aws-sdk-install" `
             -DCMAKE_INSTALL_PREFIX="$env:GITHUB_WORKSPACE\install"
 
           # Build
@@ -99,7 +117,7 @@ jobs:
         run: |
           # Set environment variables for MSI build
           echo "PROJECT_DIR=$env:GITHUB_WORKSPACE\src\odbc\rsodbc" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "DEPENDENCIES_INSTALL_DIR=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "DEPENDENCIES_INSTALL_DIR=$env:GITHUB_WORKSPACE\aws-sdk-install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           echo "RS_BUILD_TYPE=Release" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build MSI Installer
