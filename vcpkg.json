@@ -1,0 +1,20 @@
+{
+  "name": "redshift-odbc-driver",
+  "version": "2.1.13.0",
+  "description": "Amazon Redshift ODBC Driver with AWS SDK C++ 1.11.285",
+  "dependencies": [
+    "zlib",
+    {
+      "name": "aws-sdk-cpp",
+      "version>=": "1.11.285",
+      "features": [
+        "core",
+        "redshift",
+        "redshift-serverless",
+        "sts",
+        "sso-oidc"
+      ]
+    }
+  ],
+  "builtin-baseline": "f7423ee180c4b7f40d43402c2feb3859161ef625"
+}
