@@ -1,7 +1,7 @@
 {
   "name": "redshift-odbc-driver",
   "version": "2.1.13.0",
-  "description": "Amazon Redshift ODBC Driver with AWS SDK C++",
+  "description": "Amazon Redshift ODBC Driver with latest AWS SDK C++",
   "dependencies": [
     "zlib",
     {
@@ -13,5 +13,6 @@
         "sso-oidc"
       ]
     }
-  ]
+  ],
+  "builtin-baseline": "66c0373dc7fca549e5803087b9487edfe3aca0a1"
 }
