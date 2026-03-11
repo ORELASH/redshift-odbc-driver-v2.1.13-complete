@@ -1,0 +1,41 @@
+AlteryxGui      75c-5adc	ENTER SQLDriverConnectW 
+		HDBC                0x000001E636F185D0
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FFCB91F8420 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FFCB91F8420 
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+AlteryxGui      75c-5adc	EXIT  SQLDriverConnectW  with return code -1 (SQL_ERROR)
+		HDBC                0x000001E636F185D0
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FFCB91F8420 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FFCB91F8420 
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+		DIAG [IM003] Specified driver could not be loaded due to system error  1114: A dynamic link library (DLL) initialization routine failed. (Amazon Redshift ODBC Driver (x64), C:\Program Files\Amazon Redshift ODBC Driver x64\Drivers\rsodbc.dll). (160) 
+
+AlteryxGui      75c-5adc	ENTER SQLGetDiagRecW 
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x000001E636F185D0
+		SQLSMALLINT                  1 
+		SQLWCHAR *          0x00000082591FD910
+		SQLINTEGER *        0x00000082591FDB38
+		SQLWCHAR *          0x000001E637EBEF00 
+		SQLSMALLINT               1024 
+		SQLSMALLINT *       0x00000082591FDB40
+
+AlteryxGui      75c-5adc	EXIT  SQLGetDiagRecW  with return code 0 (SQL_SUCCESS)
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x000001E636F185D0
+		SQLSMALLINT                  1 
+		SQLWCHAR *          0x00000082591FD910 [       5] "IM003"
+		SQLINTEGER *        0x00000082591FDB38 (160)
+		SQLWCHAR *          0x000001E637EBEF00 [     229] "Specified driver could not be loaded due to system error  1114: A dynamic link library (DLL) initialization routine failed. (Amazon Redshift ODBC Driver (x64), C:\Program Files\Amazon Redshift ODBC Driver x64\Drivers\rsodbc.dll)."
+		SQLSMALLINT               1024 
+		SQLSMALLINT *       0x00000082591FDB40 (229)
